@@ -1,13 +1,17 @@
 package com.harshalbhakta.testkotlinreflectionandroid
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.harshalbhakta.testkotlinreflectionandroid.models.Admin
+import com.harshalbhakta.testkotlinreflectionandroid.models.BaseUser
 import com.harshalbhakta.testkotlinreflectionandroid.models.Student
+import kotlin.reflect.KClass
+import kotlin.reflect.full.createInstance
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,16 +45,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun testKotlinReflection() {
-        var u1 = Student("Harshal")
+        var u1 = Student()
         print(u1.name)
 
-        var a1 = Admin("Admin")
+        var a1 = Admin()
         print(a1.name)
 
         val mapping = mapOf("Student" to Student::class, "Admin" to Admin::class)
 
         for ((key, value) in mapping) {
-            print(value)
+            val callingClass = value as KClass<*>
+            val instance = callingClass.createInstance() as BaseUser
+            Log.d("KOTLIN", instance.userType.toString())
         }
     }
 }
